@@ -78,6 +78,10 @@ void mount_flash_partition() {
 
     list_directory(BASE_PATH);
     display_file_content("/spiflash/note.txt");
+    display_file_content("/spiflash/readme.txt");
+    display_file_content("/spiflash/res/res.txt");
+    display_file_content("/spiflash/res/new.txt");
+
 }
 
 extern "C" void app_main(void)
