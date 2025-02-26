@@ -3,7 +3,7 @@ import os
 
 import esptool
 
-from pack_fatfs_image import OUTPUT_DIR, PARTITION_NAME, PARTITION_NAME, get_partition_info
+from pack_fatfs_image import OUTPUT_DIR, PARTITION_NAME, PARTITION_NAME, get_partition_info,get_absolute_path
 
 # 配置
 ESPTOOL_PATH = "/path/to/esptool.py"  # esptool.py 的路径
@@ -12,11 +12,13 @@ BAUD_RATE = "2000000"  # 波特率
 FLASH_MODE = "dio"  # Flash 模式
 FLASH_FREQ = "80m"  # Flash 频率
 FLASH_SIZE = "16MB"  # Flash 大小
-IMAGE_FILE = r"E:\JetBrains\Clion\Clion_project\esp32s3_idf532_flash\build_fatfs_bin\storage.bin"  # 镜像文件路径
+# IMAGE_FILE = r"..\..\build_fatfs_bin\storage.bin"  # 镜像文件路径
 # IMAGE_FILE = r"E:\JetBrains\Clion\Clion_project\esp32s3_idf532_flash\build\storage.bin"  # 镜像文件路径
-# IMAGE_FILE = OUTPUT_DIR + "/" + PARTITION_NAME + ".bin"  # 镜像文件路径
+IMAGE_FILE = OUTPUT_DIR + "/" + PARTITION_NAME + ".bin"  # 镜像文件路径
 IMAGE_OFFSET = "0x110000"  # 镜像文件的烧录地址
 
+
+IMAGE_FILE = get_absolute_path(IMAGE_FILE)
 
 def flash_fatfs_image():
     size, offset = get_partition_info(PARTITION_NAME)

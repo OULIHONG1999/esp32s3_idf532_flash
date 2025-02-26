@@ -60,7 +60,7 @@ void display_file_content(const char *file_path) {
 
 void mount_flash_partition() {
     const esp_vfs_fat_mount_config_t mount_config = {
-        .format_if_mount_failed = false,
+        .format_if_mount_failed = false, //  true 挂载失败就会格式化
         .max_files = 4,
         .allocation_unit_size = CONFIG_WL_SECTOR_SIZE,
         .disk_status_check_enable = false,

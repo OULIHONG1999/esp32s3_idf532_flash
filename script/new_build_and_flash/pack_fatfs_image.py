@@ -4,16 +4,30 @@ import csv
 
 # 配置
 IDF_PATH = r"E:\ESP\IDF532\Espressif\frameworks\esp-idf-v5.3.2"  # ESP-IDF 的路径
-PYTHON_PATH = r"E:\JetBrains\Clion\Clion_project\esp32s3_idf532_flash\.venv\Scripts"  # Python 解释器路径
-FATFS_DIR = r"E:\JetBrains\Clion\Clion_project\esp32s3_idf532_flash\data"  # 要打包的文件目录路径
-OUTPUT_DIR = r"E:\JetBrains\Clion\Clion_project\esp32s3_idf532_flash\build_fatfs_bin"  # 生成的镜像文件输出路径
+PYTHON_PATH = r"..\..\.venv\Scripts"  # Python 解释器路径
+FATFS_DIR = r"..\..\data"  # 要打包的文件目录路径
+OUTPUT_DIR = r"..\..\build_fatfs_bin"  # 生成的镜像文件输出路径
+PARTITION_CSV = r"..\..\\partitions.csv"  # 分区表 CSV 文件路径
+
 PARTITION_NAME = "storage"  # 分区名称
-PARTITION_CSV = r"E:\JetBrains\Clion\Clion_project\esp32s3_idf532_flash\partitions.csv"  # 分区表 CSV 文件路径
+
 USE_DEFAULT_DATETIME = False  # 是否使用默认时间戳
 ONE_FAT = False  # 是否只创建一个 FAT 分区
 WL_INIT = True  # 是否启用 Wear Levelling
 CONFIG_FATFS_SECTOR_512 = False  # 假设扇区大小为 512
-CONFIG_FATFS_LFN_NONE = True  # 假设不支持长文件名
+CONFIG_FATFS_LFN_NONE = False  # 假设不支持长文件名
+
+
+# 取得相对地址的绝对地址
+def get_absolute_path(relative_path):
+    return os.path.abspath(relative_path)
+
+
+# 取得相对地址的绝对地址
+PYTHON_PATH = get_absolute_path(PYTHON_PATH)
+FATFS_DIR = get_absolute_path(FATFS_DIR)
+OUTPUT_DIR = get_absolute_path(OUTPUT_DIR)
+PARTITION_CSV = get_absolute_path(PARTITION_CSV)
 
 def get_partition_info(partition_name):
     """
@@ -41,12 +55,18 @@ def pack_fatfs_image():
         print(f"Failed to get partition info for '{PARTITION_NAME}'. Check the partition table file.")
         exit(-1)
 
+    # 去除size前后的空格
+    size = size.strip()
+    print(size)
+
     # 转换大小为十六进制
     if 'M' in size:
         size = hex(int(size.replace('M', '')) * 1024 * 1024)
     elif 'K' in size:
         size = hex(int(size.replace('K', '')) * 1024)
-    elif size.startswith('0x'):
+    elif size.startswith('0x') or size.startswith('0X'):
+        print(f"size is hex {size}")
+        size = hex(int(size, 16))  # 修改这里，添加进制参数
         pass
     else:
         size = hex(int(size))
@@ -95,6 +115,7 @@ def pack_fatfs_image():
 
     # 执行打包命令
     try:
+        # 打印完整的命令行
         print(f"Executing: {' '.join(command)}")
         subprocess.run(command, check=True)
         print(f"FATFS image '{image_file}' generated successfully.")
