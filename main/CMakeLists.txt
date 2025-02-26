@@ -12,4 +12,4 @@ idf_component_register(SRCS "main.cpp"
 set(image ../data)
 
 #fatfs_create_rawflash_image(storage ${image} FLASH_IN_PROJECT)
-fatfs_create_spiflash_image(storage ${image} FLASH_IN_PROJECT PRESERVE_TIME)
+#fatfs_create_spiflash_image(storage ${image} FLASH_IN_PROJECT PRESERVE_TIME)

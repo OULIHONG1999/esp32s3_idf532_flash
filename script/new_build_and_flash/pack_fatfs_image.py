@@ -7,7 +7,7 @@ IDF_PATH = r"E:\ESP\IDF532\Espressif\frameworks\esp-idf-v5.3.2"  # ESP-IDF 的�
 PYTHON_PATH = r"..\..\.venv\Scripts"  # Python 解释器路径
 FATFS_DIR = r"..\..\data"  # 要打包的文件目录路径
 OUTPUT_DIR = r"..\..\build_fatfs_bin"  # 生成的镜像文件输出路径
-PARTITION_CSV = r"..\..\\partitions.csv"  # 分区表 CSV 文件路径
+PARTITION_CSV = r"..\..\partitions.csv"  # 分区表 CSV 文件路径
 
 PARTITION_NAME = "storage"  # 分区名称
 
@@ -61,13 +61,13 @@ def pack_fatfs_image():
 
     # 转换大小为十六进制
     if 'M' in size:
+        print(size)
         size = hex(int(size.replace('M', '')) * 1024 * 1024)
     elif 'K' in size:
         size = hex(int(size.replace('K', '')) * 1024)
     elif size.startswith('0x') or size.startswith('0X'):
         print(f"size is hex {size}")
         size = hex(int(size, 16))  # 修改这里，添加进制参数
-        pass
     else:
         size = hex(int(size))
 
